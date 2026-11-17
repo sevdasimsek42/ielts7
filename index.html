@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f3a5f">
+<title>IELTS 7</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="IELTS 7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f1ea;--card:#fffdf8;--ink:#1d2433;--muted:#6b7280;--accent:#1f3a5f;--good:#2f7d5b;--bad:#b4533a;--line:#e5dfd3;--soft:#efe9dc}
+@media (prefers-color-scheme:dark){:root{--bg:#141820;--card:#1d2330;--ink:#eef0f4;--muted:#9aa3b2;--accent:#8fb3e8;--good:#5fbf93;--bad:#e08a70;--line:#2c3444;--soft:#252c3a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-tap-highlight-color:transparent;
+padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 24px)}
+.wrap{max-width:460px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+h1{font-family:Fraunces,serif;font-size:22px;margin:0}
+.streak{font-weight:600;font-size:14px;background:var(--card);border:1px solid var(--line);padding:6px 10px;border-radius:999px}
+.tabs{display:flex;gap:6px;margin-bottom:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px}
+.tabs button{flex:1;background:none;border:0;color:var(--muted);border-radius:10px;padding:10px 4px;font:500 14px Inter,sans-serif;cursor:pointer}
+.tabs button.on{background:var(--accent);color:var(--bg)}
+.tabs button .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--good);margin-left:5px;vertical-align:middle}
+.bar{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0 4px}
+.bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.meta{font-size:13px;color:var(--muted);display:flex;justify-content:space-between}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 22px;margin-top:16px;min-height:330px;
+display:flex;flex-direction:column;justify-content:center;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.05);user-select:none}
+.card.tap{cursor:pointer}
+.tag{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.word{font-family:Fraunces,serif;font-size:40px;margin:10px 0 4px;word-break:break-word}
+.pos{color:var(--muted);font-style:italic;font-size:15px}
+.hint{margin-top:26px;color:var(--muted);font-size:14px}
+.tr{font-size:22px;font-weight:600;color:var(--accent);margin-top:22px}
+.ex{margin-top:14px;font-size:16px;line-height:1.5}
+.ex b{color:var(--accent)}
+.speak{margin:14px auto 0;background:none;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:inherit;font-size:14px;cursor:pointer}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+button.big{border:0;border-radius:14px;padding:16px;font:600 16px Inter,sans-serif;color:#fff;cursor:pointer}
+.no{background:var(--bad)}.yes{background:var(--good)}
+.primary{background:var(--accent);color:var(--bg)!important;width:100%;margin-top:14px}
+.done .word{font-size:30px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.stat{background:var(--soft);border-radius:14px;padding:12px 6px;text-align:center}
+.stat b{display:block;font-size:22px;font-family:Fraunces,serif}
+.stat span{font-size:12px;color:var(--muted)}
+/* grammar */
+.gcard{text-align:left;justify-content:flex-start;min-height:0}
+.q{font-size:20px;line-height:1.5;margin:14px 0 18px;font-family:Fraunces,serif;font-weight:600}
+.blank{display:inline-block;min-width:70px;border-bottom:2px solid var(--accent);color:var(--accent);text-align:center}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:13px 14px;margin-top:8px;font:500 16px Inter,sans-serif;cursor:pointer}
+.opt.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 15%,var(--card))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,var(--card))}
+.opt:disabled{cursor:default}
+.fb{margin-top:16px;padding:14px;border-radius:12px;background:var(--soft);font-size:15px;line-height:1.5}
+.fb b{display:block;margin-bottom:4px}
+.lesson{font-size:15px;line-height:1.6}
+.lesson h2{font-family:Fraunces,serif;font-size:24px;margin:6px 0 10px}
+.lesson p{margin:0 0 10px}
+.lesson i{color:var(--accent);font-style:normal;font-weight:500}
+.lesson .tip{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14px}
+.list{margin-top:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.row{display:flex;justify-content:space-between;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);font-size:15px}
+.row:last-child{border:0}
+.row small{color:var(--muted);text-align:right}
+.row.click{cursor:pointer}
+.lv{display:inline-flex;gap:2px;vertical-align:middle}
+.lv i{width:7px;height:7px;border-radius:2px;background:var(--line)}
+.lv i.f{background:var(--good)}
+.lv.weak i.f{background:var(--bad)}
+.inlesson{padding:4px 14px 14px;border-bottom:1px solid var(--line)}
+h3{font-family:Fraunces,serif;font-size:18px;margin:22px 0 4px}
+.note{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-height:1.5}
+select{font:inherit;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:4px 6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><h1>Günlük IELTS</h1><div class="streak" id="streak">🔥 0 gün</div></header>
+  <nav class="tabs">
+    <button id="tW" class="on">Kelime<span id="dW"></span></button>
+    <button id="tG">Gramer<span id="dG"></span></button>
+    <button id="tP">İlerlemem</button>
+  </nav>
+  <div id="top"><div class="bar"><i id="prog"></i></div>
+  <div class="meta"><span id="left">Yükleniyor…</span><span id="sync"></span></div></div>
+  <div id="vW"></div>
+  <div id="vG" hidden></div>
+  <div id="vP" hidden></div>
+  <p class="note" id="noteW">Her gün yeni kelimeler + tekrarı gelen eskiler. "Biliyordum" dediğin kelime daha seyrek, "Bilmiyordum" dediğin ertesi gün tekrar gelir.<br>
+  Günlük yeni kelime: <select id="perDay"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></p>
+  <p class="note" id="noteG" hidden>Her gün 8 soru. Yanlış yaptığın konunun anlatımı açılır, hemen benzer bir soru gelir ve konu ertesi gün tekrar sorulur. Doğru bildikçe konu daha seyrek gelir.<br>🔥 Seri, kelime ve gramerin ikisini de bitirdiğin günler sayılır.</p>
+</div>
+<script>
+// ---------- KELİMELER ----------
+const RAW=`abundant|adj|bol, çok miktarda|The region has abundant natural resources.
+accelerate|v|hızlandırmak|Technology has accelerated the pace of change.
+accommodate|v|barındırmak; uyum sağlamak|The new stadium can accommodate 60,000 fans.
+acquire|v|edinmek, kazanmak|Children acquire language skills remarkably fast.
+adequate|adj|yeterli|Many schools lack adequate funding.
+advocate|v|savunmak, desteklemek|Experts advocate a ban on plastic bags.
+affluent|adj|varlıklı, zengin|Affluent countries consume most of the world's energy.
+allocate|v|tahsis etmek, ayırmak|The government allocated more money to healthcare.
+alleviate|v|hafifletmek|Building new roads may alleviate traffic congestion.
+ambiguous|adj|belirsiz, iki anlamlı|The results of the study were ambiguous.
+anticipate|v|öngörmek, beklemek|We anticipate a rise in house prices.
+apparent|adj|açık, belli|It soon became apparent that the plan would fail.
+arbitrary|adj|keyfi, gelişigüzel|The rules seemed completely arbitrary.
+assess|v|değerlendirmek|Teachers assess students in different ways.
+attain|v|ulaşmak, elde etmek|Few athletes attain such a high level.
+beneficial|adj|faydalı|Regular exercise is beneficial to health.
+bias|n|önyargı, taraflılık|Newspapers often show political bias.
+burden|n|yük|Rising taxes place a heavy burden on families.
+capacity|n|kapasite, yetenek|The factory is working at full capacity.
+coherent|adj|tutarlı, anlaşılır|Your essay needs a coherent argument.
+coincide|v|aynı zamana denk gelmek|The festival coincides with the school holidays.
+compelling|adj|ikna edici, etkileyici|There is compelling evidence for climate change.
+compensate|v|telafi etmek, tazmin etmek|Nothing can compensate for the loss of a loved one.
+comprehensive|adj|kapsamlı|The report gives a comprehensive overview.
+comprise|v|oluşmak, içermek|The committee comprises ten members.
+concentrate|v|yoğunlaşmak; toplanmak|Most jobs are concentrated in big cities.
+consequence|n|sonuç|Deforestation has serious consequences.
+considerable|adj|hatırı sayılır, önemli|The project cost a considerable amount of money.
+constrain|v|kısıtlamak|Lack of money constrains our options.
+contemporary|adj|çağdaş, günümüze ait|Contemporary art is often controversial.
+contradict|v|çelişmek|The new findings contradict earlier research.
+controversial|adj|tartışmalı|Genetic engineering remains a controversial issue.
+crucial|adj|çok önemli, kritik|Sleep is crucial for memory.
+curb|v|dizginlemek, sınırlamak|New laws aim to curb pollution.
+decline|v/n|azalmak; düşüş|The birth rate has declined sharply.
+deliberate|adj|kasıtlı, bilinçli|It was a deliberate attempt to mislead.
+demonstrate|v|göstermek, kanıtlamak|The study demonstrates a clear link.
+deteriorate|v|kötüleşmek|Air quality has deteriorated in recent years.
+detrimental|adj|zararlı|Too much screen time is detrimental to children.
+diminish|v|azalmak, azaltmak|The pain diminished over time.
+discrepancy|n|tutarsızlık, fark|There is a discrepancy between the two figures.
+disparity|n|eşitsizlik, uçurum|The income disparity between rich and poor is growing.
+distinct|adj|belirgin, farklı|There are two distinct groups of learners.
+diverse|adj|çeşitli, farklı|London has a very diverse population.
+dominant|adj|baskın, hakim|English is the dominant language of science.
+drastic|adj|sert, köklü|Drastic measures are needed to save the species.
+eliminate|v|ortadan kaldırmak|The aim is to eliminate poverty.
+emerge|v|ortaya çıkmak|New problems emerged during the trial.
+emphasise|v|vurgulamak|The author emphasises the role of education.
+enhance|v|geliştirmek, artırmak|Music can enhance concentration.
+enormous|adj|devasa|Tourism has an enormous impact on the economy.
+ensure|v|sağlamak, garanti etmek|We must ensure that every child goes to school.
+essential|adj|gerekli, temel|Water is essential for life.
+evaluate|v|değerlendirmek|It is hard to evaluate the success of the policy.
+evident|adj|açık, aşikar|It is evident that attitudes have changed.
+exaggerate|v|abartmak|The media often exaggerate the risks.
+exceed|v|aşmak, geçmek|Demand exceeded supply last year.
+exploit|v|sömürmek; faydalanmak|Companies exploit cheap labour.
+facilitate|v|kolaylaştırmak|The internet facilitates communication.
+feasible|adj|uygulanabilir|Is it feasible to ban cars from city centres?
+fluctuate|v|dalgalanmak|Prices fluctuated throughout the year.
+fundamental|adj|temel, esaslı|Education is a fundamental right.
+generate|v|üretmek, oluşturmak|Wind farms generate clean electricity.
+hazardous|adj|tehlikeli|Some factories release hazardous waste.
+hinder|v|engellemek|Poor transport hinders economic growth.
+hypothesis|n|hipotez, varsayım|The data support this hypothesis.
+identical|adj|aynı, özdeş|The two products are almost identical.
+implement|v|uygulamak|The council will implement the plan next year.
+implication|n|sonuç, ima|The implications of AI are still unclear.
+impose|v|dayatmak, uygulamak|The state imposed a tax on sugary drinks.
+inevitable|adj|kaçınılmaz|Change is inevitable.
+inhabitant|n|sakin, yerleşik kişi|The city has two million inhabitants.
+initiative|n|girişim|The scheme is a government initiative.
+innovative|adj|yenilikçi|The company is known for innovative design.
+intensify|v|yoğunlaştırmak|Competition for jobs has intensified.
+interpret|v|yorumlamak|Data can be interpreted in many ways.
+justify|v|haklı çıkarmak, gerekçelendirmek|Can the high cost be justified?
+legitimate|adj|meşru, yasal|They have a legitimate reason to complain.
+mandatory|adj|zorunlu|Wearing a seatbelt is mandatory.
+marginal|adj|marjinal, çok az|There was only a marginal increase.
+mitigate|v|hafifletmek, azaltmak|Trees help mitigate the effects of heat.
+modify|v|değiştirmek, düzenlemek|The design was modified after testing.
+neglect|v|ihmal etmek|Many elderly people are neglected.
+notion|n|kavram, fikir|The notion of a job for life has disappeared.
+obsolete|adj|modası geçmiş, eskimiş|Many skills will soon become obsolete.
+obtain|v|elde etmek|You must obtain a visa before you travel.
+overwhelming|adj|ezici, karşı konulmaz|The overwhelming majority agreed.
+paramount|adj|en önemli, üstün|Safety is of paramount importance.
+perceive|v|algılamak|Teenagers perceive risk differently.
+phenomenon|n|olgu, fenomen|Globalisation is a modern phenomenon.
+plausible|adj|akla yatkın|That is a plausible explanation.
+predominantly|adv|çoğunlukla, ağırlıklı olarak|The workforce is predominantly female.
+preliminary|adj|ön, hazırlık niteliğinde|Preliminary results look promising.
+prevalent|adj|yaygın|Obesity is prevalent in developed countries.
+prioritise|v|öncelik vermek|Governments should prioritise public health.
+profound|adj|derin, büyük|The internet has had a profound effect on society.
+prohibit|v|yasaklamak|Smoking is prohibited in public places.
+prominent|adj|önde gelen, belirgin|She is a prominent scientist.
+promote|v|teşvik etmek, tanıtmak|Schools should promote healthy eating.
+proportion|n|oran|A large proportion of students work part-time.
+prospect|n|olasılık, beklenti|Job prospects for graduates are improving.
+pursue|v|peşinden gitmek, sürdürmek|Many students pursue a career abroad.
+radical|adj|köklü, radikal|We need radical changes to the system.
+reluctant|adj|isteksiz|People are reluctant to change their habits.
+remarkable|adj|dikkat çekici, olağanüstü|The city has made remarkable progress.
+restrict|v|kısıtlamak|Some countries restrict internet access.
+reverse|v|tersine çevirmek|It is difficult to reverse the damage.
+rigorous|adj|titiz, sıkı|The drug went through rigorous testing.
+scarce|adj|kıt, az bulunur|Water is becoming scarce in many regions.
+scrutiny|n|sıkı inceleme|The decision came under public scrutiny.
+significant|adj|önemli, kayda değer|There was a significant rise in sales.
+sophisticated|adj|gelişmiş, karmaşık|Phones have become very sophisticated.
+stimulate|v|canlandırmak, teşvik etmek|Lower taxes may stimulate the economy.
+substantial|adj|önemli miktarda, büyük|A substantial number of people disagreed.
+sufficient|adj|yeterli|There is not sufficient evidence.
+surpass|v|geçmek, aşmak|China surpassed the USA in car sales.
+sustainable|adj|sürdürülebilir|We need a sustainable energy policy.
+tackle|v|ele almak, mücadele etmek|The government must tackle unemployment.
+tendency|n|eğilim|There is a tendency to blame young people.
+undermine|v|baltalamak, zayıflatmak|Corruption undermines trust in government.
+unprecedented|adj|benzeri görülmemiş|The country faced an unprecedented crisis.
+utilise|v|kullanmak, yararlanmak|Solar energy is not fully utilised.
+viable|adj|uygulanabilir, yaşayabilir|Electric cars are now a viable alternative.
+vulnerable|adj|savunmasız, korunmasız|Children are the most vulnerable group.
+widespread|adj|yaygın|There is widespread support for the plan.
+yield|v/n|vermek, üretmek; verim|The experiment yielded surprising results.`;
+const WORDS=RAW.trim().split("\n").map(l=>{const[w,p,t,e]=l.split("|");return{w,p,t,e}});
+
+// ---------- GRAMER ----------
+// qs: [soru (___ = boşluk), doğru cevap, [yanlışlar], açıklama]
+const TOPICS=[
+{id:"art",name:"Artikeller (a / an / the / —)",lesson:`
+<p><b>a / an</b>: tekil, sayılabilir ve ilk kez bahsedilen şey. Harfe değil <u>sese</u> bakılır: <i>a university</i> (/ju/ sesi), <i>an hour</i> (h okunmaz), <i>an MBA</i>.</p>
+<p><b>the</b>: belirli, bilinen ya da tek olan şey: <i>the government, the internet, the USA</i>. Grafiklerde belirli bir rakamdan bahsederken: <i>the number of…, the proportion of…, the rate of…</i></p>
+<p><b>Artikel yok (—)</b>: genel anlamda çoğul ya da sayılamayan isimler: <i>Education is important.</i> <i>Cars cause pollution.</i></p>
+<p><b>the + sıfat</b> bir insan grubunu anlatır: <i>the rich, the elderly, the unemployed</i>.</p>
+<p class="tip">💡 Türkçede artikel olmadığı için Türk adayların en sık yaptığı hata budur. Yazını bitirince tekil sayılabilir isimlerin önüne tek tek bak: a/an/the var mı?</p>`,
+qs:[["___ unemployment rate in Spain rose sharply in 2012.","The",["A","An","—"],"Belirli bir oran (İspanya'nın oranı) → the."],
+["___ education is the key to reducing poverty.","—",["The","An","A"],"Genel anlamda, sayılamayan isim → artikel yok."],
+["She works as ___ university lecturer.","a",["an","the","—"],"university /ju/ sesiyle başlar, sesli harf sesi değil → a."],
+["It took ___ hour to complete the survey.","an",["a","the","—"],"hour'da h okunmaz, sesli harf sesiyle başlar → an."],
+["___ rich should pay more tax.","The",["—","A","An"],"the + sıfat = bir grup insan (zenginler)."]]},
+
+{id:"pp",name:"Present Perfect mi, Past Simple mı?",lesson:`
+<p><b>Past Simple (V2)</b>: geçmişte <u>bitmiş, zamanı belli</u> olay: <i>in 2015, last year, between 1990 and 2000, ago</i>.<br><i>The government introduced a new law in 2015.</i></p>
+<p><b>Present Perfect (have/has + V3)</b>: geçmişte başlayıp <u>şimdiye bağlanan</u> durum: <i>since, for, over the past decade, so far, recently</i>.<br><i>Online shopping has become very popular over the past decade.</i></p>
+<p class="tip">💡 Task 1'de grafik tamamen geçmişteyse (ör. 1990–2010) sadece Past Simple kullan. "since 2010" ya da "up to now" gibi ifadeler görürsen Present Perfect'e geç.</p>`,
+qs:[["Since 2010, the number of tourists ___ steadily.","has increased",["increased","is increasing","had increase"],"since → şimdiye kadar devam eden → Present Perfect."],
+["In 2015, the government ___ a new law on recycling.","introduced",["has introduced","has been introducing","introduces"],"Zamanı belli, bitmiş olay (in 2015) → Past Simple."],
+["I ___ in Ankara for five years, and I still live here.","have lived",["lived","am living","was living"],"Hâlâ devam ediyor + for → Present Perfect."],
+["The figure ___ by 20% between 1990 and 2000.","fell",["has fallen","has been falling","falls"],"Geçmişte bitmiş bir aralık → Past Simple."],
+["Over the past decade, online shopping ___ extremely popular.","has become",["became","becomes","had become"],"over the past decade = bugüne kadar → Present Perfect."]]},
+
+{id:"cond",name:"If cümleleri (Conditionals)",lesson:`
+<p><b>Type 0</b> (genel gerçek): If + present, present → <i>If you heat ice, it melts.</i></p>
+<p><b>Type 1</b> (gerçek olasılık): If + present, will → <i>If we act now, we will solve it.</i> (If'li tarafa will gelmez!)</p>
+<p><b>Type 2</b> (hayali, şimdi): If + V2, would + V1 → <i>If governments invested more, fewer people would drive.</i></p>
+<p><b>Type 3</b> (hayali, geçmiş): If + had V3, would have V3 → <i>If I had studied, I would have passed.</i></p>
+<p><b>Mixed</b>: geçmişteki koşul → şimdiki sonuç: If + had V3, would + V1 → <i>If she had taken the job, she would be rich now.</i></p>
+<p><b>Unless</b> = if … not → <i>Unless we take action…</i> (Unless'ten sonra olumsuz kullanma.)</p>
+<p class="tip">💡 Band 7 için Writing'de en az bir Type 2 veya Type 3 cümlesi kullanmak "complex structures" puanını yükseltir.</p>`,
+qs:[["If governments ___ more in public transport, fewer people would drive.","invested",["invest","will invest","had invested"],"would + V1 → Type 2 → If + V2."],
+["If I had studied harder, I ___ the exam.","would have passed",["would pass","will pass","passed"],"had studied → Type 3 → would have + V3."],
+["If you heat ice, it ___.","melts",["would melt","will have melted","melted"],"Genel bilimsel gerçek → Type 0."],
+["If she had taken the job in London, she ___ rich now.","would be",["would have been","will be","is"],"Geçmiş koşul + 'now' sonucu → mixed conditional."],
+["Unless we ___ action now, the problem will get worse.","take",["don't take","will take","took"],"Unless zaten olumsuz anlam taşır; Type 1'de present gelir."]]},
+
+{id:"rel",name:"Relative Clauses (who / which / that / whose / where)",lesson:`
+<p><b>who</b> insan, <b>which</b> şey, <b>that</b> ikisi de (sadece virgülsüz cümlelerde), <b>whose</b> sahiplik, <b>where</b> yer.</p>
+<p><b>Defining</b> (virgülsüz, kimi kastettiğimizi belirler): <i>The book that I bought is useful.</i></p>
+<p><b>Non-defining</b> (virgüllü, ek bilgi): <i>My brother, who lives in Izmir, is a doctor.</i> → Burada <u>that kullanılmaz</u>.</p>
+<p><b>, which</b> bütün bir cümleye de bağlanabilir: <i>Many people moved to cities, which led to housing shortages.</i></p>
+<p class="tip">💡 ", which led to…" yapısı Task 2'de sebep–sonuç anlatmanın kısa ve Band 7 seviyesinde bir yoludur.</p>`,
+qs:[["The city ___ I was born has changed a lot.","where",["which","who","whose"],"Yer + cümle (I was born there) → where."],
+["Students ___ parents are teachers often do well at school.","whose",["who","which","that"],"Sahiplik (onların ebeveynleri) → whose."],
+["My brother, ___ lives in Izmir, is a doctor.","who",["that","which","whom"],"Virgüllü cümlede that olmaz; insan + özne → who."],
+["The book ___ I bought yesterday is very useful.","that",["who","where","whose"],"Şey + virgülsüz → that (ya da which)."],
+["Many people moved to cities, ___ led to housing shortages.","which",["that","what","who"],"Bütün cümleye bağlanan → , which."]]},
+
+{id:"pas",name:"Passive Voice (edilgen yapı)",lesson:`
+<p>Yapı: <b>be + V3</b>. Zamanı "be" gösterir:</p>
+<p><i>is built</i> (present) · <i>was built</i> (past) · <i>has been built</i> · <i>will be built</i> · <i>is being built</i></p>
+<p>Kimin yaptığı önemli değilse ya da bilinmiyorsa kullanılır: <i>The bridge was built in 1973.</i></p>
+<p><b>Task 1 süreç diyagramları</b> neredeyse tamamen passive yazılır: <i>The leaves are collected and then dried.</i></p>
+<p><b>Akademik yapı</b>: <i>It is predicted / believed / argued that…</i></p>
+<p class="tip">💡 Process sorusu gelirse her adımı "is/are + V3" ile yaz, sıralama için first, then, after that, finally kullan.</p>`,
+qs:[["The bridge ___ in 1973.","was built",["built","has built","was building"],"Köprü kendini inşa etmez → passive, geçmiş → was built."],
+["A new hospital ___ in the city centre next year.","will be built",["will build","is building","builds"],"Gelecek + passive → will be + V3."],
+["In the diagram, the leaves ___ and then dried.","are collected",["collect","collected","are collecting"],"Süreç diyagramı → present passive."],
+["It ___ that the population will double by 2050.","is predicted",["predicts","has predicted","predicting"],"It is predicted that… → akademik passive."],
+["The results ___ yet.","haven't been published",["haven't published","aren't publishing","didn't publish"],"yet → Present Perfect; sonuçlar yayımlanır → passive."]]},
+
+{id:"sva",name:"Özne–fiil uyumu (Subject–Verb Agreement)",lesson:`
+<p><b>The number of + çoğul</b> → <u>tekil</u> fiil: <i>The number of students <b>has</b> increased.</i></p>
+<p><b>A number of + çoğul</b> (= birçok) → <u>çoğul</u> fiil: <i>A number of students <b>have</b> complained.</i></p>
+<p><b>Each / every / one of</b> → tekil: <i>Each of the countries <b>has</b>…</i></p>
+<p>Sayılamayan isimler (information, research, evidence) → tekil: <i>The information <b>is</b>…</i></p>
+<p><b>Neither… nor / either… or</b>: fiil <u>yakındaki</u> özneye uyar: <i>Neither the teacher nor the students <b>were</b>…</i></p>
+<p class="tip">💡 Task 1'de "The number of… <b>was</b>", "The proportion of… <b>was</b>" yazmayı alışkanlık hâline getir.</p>`,
+qs:[["The number of students ___ increased.","has",["have","are","were"],"The number of → tekil fiil."],
+["A number of students ___ complained about the food.","have",["has","is","was"],"A number of = birçok → çoğul fiil."],
+["Each of the countries ___ its own policy.","has",["have","are having","were having"],"Each of → tekil."],
+["The information in these reports ___ out of date.","is",["are","were","have"],"information sayılamaz → tekil."],
+["Neither the teacher nor the students ___ happy with the result.","were",["was","is","has been"],"Fiil yakındaki özneye (students) uyar."]]},
+
+{id:"cnt",name:"Sayılabilen / sayılamayan isimler",lesson:`
+<p><b>Sayılamayan</b> (çoğul eki almaz, a/an almaz): <i>information, advice, research, evidence, equipment, furniture, knowledge, traffic, money</i>.</p>
+<p>much / little / a little / amount of → sayılamayan<br>many / few / a few / number of → sayılabilen</p>
+<p><b>few</b> = çok az (olumsuz anlam), <b>a few</b> = birkaç (olumlu anlam).</p>
+<p class="tip">💡 Task 1'de: <i>the amount of water</i> (sayılamaz) ama <i>the number of cars</i> (sayılır). "informations" ve "advices" yazmak doğrudan puan kaybettirir.</p>`,
+qs:[["There isn't ___ evidence to support this claim.","much",["many","a few","few"],"evidence sayılamaz → much."],
+["The ___ of people using public transport fell.","number",["amount","much","quantity"],"people sayılabilir → number."],
+["Very ___ people attended the meeting, so it was cancelled.","few",["a few","little","a little"],"Olumsuz anlam (iptal edildi) + sayılabilir → (very) few."],
+["We need more ___ about the new course.","information",["informations","an information","the informations"],"information çoğul eki almaz."],
+["She gave me some useful ___.","advice",["advices","an advice","advise"],"advice (isim) sayılamaz; advise fiildir."]]},
+
+{id:"cmp",name:"Karşılaştırma (Comparatives)",lesson:`
+<p>Kısa sıfat: <i>higher, the highest</i> · Uzun sıfat: <i>more serious, the most serious</i></p>
+<p><b>Kat ifadeleri</b>: <i>twice as high as, three times as many as</i> (❌ twice higher than)</p>
+<p><b>Farkın büyüklüğü</b>: <i>considerably / significantly / slightly / much + comparative</i> → <i>considerably lower than</i></p>
+<p><b>The more…, the more…</b>: <i>The more you practise, the more confident you become.</i></p>
+<p class="tip">💡 Task 1'de rakamları sadece listeleme; "significantly higher than", "twice as much as" gibi karşılaştırmalar Band 7'nin temel şartıdır.</p>`,
+qs:[["Car ownership in the USA was ___ in Japan.","twice as high as",["twice higher than","two times high as","twice as higher as"],"Kat ifadesi: twice as + sıfat + as."],
+["This is ___ problem facing the world today.","the most serious",["the more serious","most serious","the seriousest"],"Uzun sıfatın üstünlük hâli → the most."],
+["The more you practise, ___ you become.","the more confident",["more confident","the most confident","the confident"],"The more…, the more… yapısı."],
+["Spending on food was ___ lower than spending on housing.","considerably",["considerable","more considerable","very"],"Comparative'i güçlendirmek için zarf gerekir; 'very lower' yanlıştır."]]},
+
+{id:"ger",name:"Gerund (-ing) mi, to + V1 mi?",lesson:`
+<p><b>-ing alan fiiller</b>: avoid, enjoy, consider, suggest, admit, deny, keep, finish, mind. Edatlardan sonra da -ing gelir: <i>look forward <u>to</u> meeting, interested <u>in</u> learning</i>.</p>
+<p><b>to + V1 alan fiiller</b>: decide, plan, want, hope, refuse, agree, afford, aim, tend. Ayrıca: <i>It is important/essential <b>to</b> educate…</i></p>
+<p><b>Anlam değiştirenler</b>: <i>stop doing</i> (bırakmak) / <i>stop to do</i> (bir şey yapmak için durmak); <i>remember doing</i> / <i>remember to do</i>.</p>
+<p class="tip">💡 "look forward to", "be used to", "object to" yapılarındaki <b>to</b> bir edattır, arkasından -ing gelir.</p>`,
+qs:[["Many people avoid ___ about money.","talking",["to talk","talk","to talking"],"avoid + -ing."],
+["The government has decided ___ taxes.","to raise",["raising","raise","raised"],"decide + to V1."],
+["I'm looking forward to ___ you.","meeting",["meet","to meet","met"],"look forward to + -ing (to burada edat)."],
+["She stopped ___ coffee because it kept her awake.","drinking",["to drink","drink","drunk"],"stop + -ing = alışkanlığı bırakmak."],
+["It is important ___ young people about the risks.","to educate",["educating","educate","educated"],"It is + sıfat + to V1."]]},
+
+{id:"link",name:"Bağlaçlar: although / despite / however / whereas",lesson:`
+<p><b>Although / Even though / While + tam cümle</b>: <i>Although it was raining, they went out.</i></p>
+<p><b>Despite / In spite of + isim ya da -ing</b>: <i>Despite the cost…</i> / <i>In spite of being tired…</i> (❌ despite it was)</p>
+<p><b>However</b> iki cümleyi bağlamaz; yeni cümlenin başına gelir ve arkasından virgül konur: <i>Cars are useful. However, they pollute.</i></p>
+<p><b>Whereas / while</b>: iki şeyi karşılaştırır: <i>Men spent more on sport, whereas women spent more on clothes.</i></p>
+<p class="tip">💡 "Coherence & Cohesion" puanı tam da bununla ilgili. Bağlaçları çeşitlendir ama her cümlenin başına bağlaç koyma.</p>`,
+qs:[["___ the high cost, many families choose private schools.","Despite",["Although","However","Even"],"Arkasından isim geliyor (the high cost) → Despite."],
+["___ it was raining, they went out.","Although",["Despite","In spite of","However"],"Arkasından tam cümle geliyor → Although."],
+["Cars are convenient. ___, they cause pollution.","However",["Although","Despite","Whereas"],"Yeni cümlenin başında + virgül → However."],
+["Men spent more on sport, ___ women spent more on clothes.","whereas",["despite","however","in spite of"],"İki grubu karşılaştırma → whereas."],
+["In spite of ___ tired, she finished the essay.","being",["she was","be","to be"],"In spite of + -ing."]]},
+
+{id:"trend",name:"Task 1: trend edatları (to / by / of / at)",lesson:`
+<p><b>to</b> = vardığı nokta: <i>rose from 40 to 60</i>.</p>
+<p><b>by</b> = değişim miktarı (fiille): <i>increased by 15%</i>.</p>
+<p><b>of</b> = değişim miktarı (isimle): <i>a rise of 15%</i>.</p>
+<p><b>at</b> = bir seviyede olmak ya da zirve yapmak: <i>peaked at 80%</i>, <i>stood at 20%</i>.</p>
+<p><b>İsim / fiil</b>: <i>There was a sharp <u>fall</u></i> (isim) ↔ <i>Sales <u>fell</u> sharply</i> (fiil + zarf).</p>
+<p class="tip">💡 Task 1'de aynı bilgiyi hem fiil hem isimle yazmayı dene, bu sana dilbilgisi çeşitliliği puanı kazandırır: "rose sharply" / "a sharp rise".</p>`,
+qs:[["Sales rose from 40,000 ___ 60,000 units.","to",["by","at","until"],"Vardığı nokta → to."],
+["The price increased ___ 15%, from $100 to $115.","by",["to","at","of"],"Fiil + değişim miktarı → by."],
+["There was a rise ___ 15% in unemployment.","of",["by","to","at"],"İsim (a rise) + miktar → of."],
+["The figure peaked ___ 80% in 2005.","at",["to","by","on"],"peak at / stand at."],
+["There was a sharp ___ in sales in March.","fall",["fell","fallen","falling down"],"a sharp + isim → fall."]]},
+
+{id:"mod",name:"Modal'lar: must have / should have / can't have",lesson:`
+<p><b>Şimdi hakkında tahmin</b>: <i>must be</i> (kesin öyle), <i>might/may be</i> (belki), <i>can't be</i> (kesin değil).</p>
+<p><b>Geçmiş hakkında tahmin</b>: <i>must have + V3</i>, <i>might have + V3</i>, <i>can't have + V3</i>.</p>
+<p><b>Geçmişe dönük pişmanlık / eleştiri</b>: <i>should have + V3</i> (yapmalıydın ama yapmadın).</p>
+<p class="tip">💡 Speaking Part 3'te "The government should have invested more in…" gibi cümleler fikrini daha olgun gösterir.</p>`,
+qs:[["He isn't answering the phone. He ___ asleep.","must be",["must have","should be","can't to be"],"Şimdiye dair güçlü tahmin → must be."],
+["She looks so happy. She ___ passed the exam.","must have",["can't have","should","must"],"Geçmişe dair güçlü tahmin → must have + V3."],
+["You ___ studied more; then you would have passed.","should have",["must have","can have","would"],"Geçmişe dönük 'yapmalıydın' → should have + V3."],
+["He ___ have stolen it — he was with me all day.","can't",["must","should","would"],"Kesinlikle imkânsız → can't have + V3."],
+["The keys aren't here. You ___ left them at work.","might have",["should","must","can"],"Geçmişe dair olasılık → might have + V3."]]},
+
+{id:"fut",name:"Gelecek zamanlar (Future forms)",lesson:`
+<p><b>will</b>: tahmin ya da anlık karar · <b>be going to</b>: plan ya da belirtiye dayalı tahmin (<i>Look at those clouds! It's going to rain.</i>)</p>
+<p><b>Present simple</b>: tarifeler ve programlar: <i>The flight leaves at 7.</i></p>
+<p><b>Future continuous (will be + -ing)</b>: gelecekte belli bir anda sürmekte olan iş: <i>This time next week I'll be lying on a beach.</i></p>
+<p><b>Future perfect (will have + V3)</b>: belli bir zamana kadar tamamlanmış olacak iş: <i>By 2050, the population will have reached 9 billion.</i></p>
+<p class="tip">💡 Gelecek projeksiyonu gösteren Task 1 grafiklerinde "is expected to / is predicted to / will have + V3" kullan.</p>`,
+qs:[["By 2050, the world population ___ 9 billion.","will have reached",["reaches","is reaching","reached"],"By + gelecek zaman = o zamana kadar tamamlanmış → future perfect."],
+["Look at those clouds! It ___ rain.","is going to",["will be","rains","is raining to"],"Şu anki belirtiye dayalı tahmin → be going to."],
+["My flight ___ at 7 tomorrow morning.","leaves",["will be leave","is leave","leaving"],"Tarife ve program → present simple."],
+["This time next week, I ___ on a beach.","will be lying",["will lie","lie","am lie"],"Gelecekte belli bir anda sürmekte olan iş → future continuous."]]},
+
+{id:"part",name:"Participle clauses (-ing / V3 ile kısaltma)",lesson:`
+<p>Relative clause ya da yan cümleyi kısaltıp daha akademik bir dil kurmanı sağlar.</p>
+<p><b>-ing</b> etken anlam taşır: <i>Students <u>arriving</u> late…</i> (= who arrive late)</p>
+<p><b>V3</b> edilgen anlam taşır: <i>The data <u>shown</u> in the table…</i> (= which is shown), <i><u>Opened</u> in 1990, the museum…</i></p>
+<p><b>Having + V3</b>: önce olan eylem: <i><u>Having finished</u> the report, she went home.</i></p>
+<p class="tip">💡 Bu yapı Band 7–8 göstergesidir. Task 1'in girişinde dene: "The table <u>given</u> illustrates…", "…, <u>accounting for</u> 40% of the total."</p>`,
+qs:[["___ in 1990, the museum now attracts millions of visitors.","Opened",["Opening","Having opening","Open"],"Müze açılır (edilgen) → V3."],
+["Students ___ late will not be allowed in.","arriving",["arrive","arrived","who arriving"],"= who arrive → etken → -ing."],
+["___ finished the report, she went home.","Having",["Had","Have","After"],"Önce olan eylem → Having + V3."],
+["The data ___ in the table shows a clear trend.","shown",["showing","shows","show"],"= which is shown → edilgen → V3."]]},
+
+{id:"wish",name:"Wish / If only / It's time",lesson:`
+<p><b>Şimdi için istek</b>: wish + V2 → <i>I wish I <u>had</u> more time.</i> (ama yok)</p>
+<p><b>Geçmiş için pişmanlık</b>: wish + had V3 → <i>I wish I <u>hadn't sent</u> that email.</i></p>
+<p><b>Yetenek</b>: wish / if only + could → <i>If only I <u>could</u> speak French!</i></p>
+<p><b>It's (high) time + V2</b>: "artık … yapmanın zamanı geldi" → <i>It's time the government <u>did</u> something.</i></p>
+<p class="tip">💡 Speaking Part 2'de geçmişte yaşadığın bir olayı anlatırken "I wish I had…" demek doğal duran bir complex structure örneğidir.</p>`,
+qs:[["I wish I ___ more time to study.","had",["have","will have","would had"],"Şimdi için istek → wish + V2."],
+["I wish I ___ that email yesterday.","hadn't sent",["didn't send","don't send","wouldn't send"],"Geçmiş pişmanlık → wish + had V3."],
+["It's time the government ___ something about pollution.","did",["does","will do","has done"],"It's time + V2."],
+["If only I ___ speak French!","could",["can","will","would can"],"Yetenek için istek → could."]]},
+
+{id:"inv",name:"Inversion (devrik yapı) — Band 7+",lesson:`
+<p>Olumsuz ya da kısıtlayıcı bir zarf cümlenin başına gelince yardımcı fiil özneden önce gelir (soru cümlesi gibi):</p>
+<p><i>Not only <u>is it</u> cheap, but it is also healthy.</i><br><i>Rarely <u>have I</u> seen such a view.</i><br><i>Hardly <u>had we</u> arrived when it started to rain.</i><br><i>Under no circumstances <u>should you</u>…</i></p>
+<p class="tip">💡 Bir essay'de bir kez kullanmak yeterli, örneğin: "Not only does this reduce pollution, but it also…". Abartırsan yapay durur.</p>`,
+qs:[["Not only ___ cheap, but it is also healthy.","is it",["it is","it was","does it"],"Not only başta → devrik: is it."],
+["Rarely ___ such a beautiful view.","have I seen",["I have seen","I saw","did I saw"],"Rarely başta → yardımcı fiil + özne."],
+["Hardly ___ arrived when it started to rain.","had we",["we had","we have","did we"],"Hardly … when → had + özne + V3."],
+["Under no circumstances ___ use your phone during the exam.","should you",["you should","you must","do you"],"Olumsuz ifade başta → devrik: should you."]]}
+];
+const TMAP=Object.fromEntries(TOPICS.map(t=>[t.id,t]));
+const G_PER_DAY=8;
+
+// ---------- ORTAK ----------
+const INTERVALS=[0,1,3,7,14,30,60];
+const $=id=>document.getElementById(id);
+const fmt=x=>x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+const today=()=>fmt(new Date());
+const addDays=(k,n)=>{const[y,m,d]=k.split("-").map(Number);return fmt(new Date(y,m-1,d+n))};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+let S={words:{},streak:0,lastDone:null,day:null,newToday:0,perDay:10,wDone:null,
+  g:{t:{},day:null,done:null,right:0,wrong:0}};
+let tab="W";
+let queue=[],idx=0,revealed=false,doneToday=0,totalToday=0;
+let gq=[],gi=0,gPhase="q",gPick=null,gOpts=[],gRight=0,gTotal=0;
+let docRef=null,tts=null,writing=false,pending=false;
+
+function loadLocal(){try{const s=localStorage.getItem("ielts_state");if(s)merge(JSON.parse(s))}catch(e){}}
+function merge(o){const g=Object.assign({},S.g,o.g||{});S=Object.assign(S,o);S.g=g;if(!S.g.t)S.g.t={}}
+function saveLocal(){try{localStorage.setItem("ielts_state",JSON.stringify(S))}catch(e){}}
+async function save(){
+  saveLocal();
+  if(!docRef)return;
+  if(writing){pending=true;return}
+  writing=true;
+  try{await docRef.set(JSON.parse(JSON.stringify(S)));$("sync").textContent="☁︎ kaydedildi"}
+  catch(e){$("sync").textContent="yalnızca bu cihazda"}
+  writing=false;
+  if(pending){pending=false;save()}
+}
+function checkStreak(){
+  const t=today();
+  if(S.wDone===t&&S.g.done===t&&S.lastDone!==t){
+    S.streak=(S.lastDone===addDays(t,-1))?S.streak+1:1;S.lastDone=t;
+  }
+}
+function header(){
+  const t=today();
+  $("streak").textContent="🔥 "+S.streak+" gün";
+  $("dW").className=S.wDone===t?"dot":"";
+  $("dG").className=S.g.done===t?"dot":"";
+  if(tab==="W"){
+    $("prog").style.width=(totalToday?doneToday/totalToday*100:100)+"%";
+    const left=queue.length-idx;$("left").textContent=left>0?left+" kart kaldı":"Kelimeler bugünlük bitti";
+  }else if(tab==="G"){
+    $("prog").style.width=(gq.length?Math.min(gi,gq.length)/gq.length*100:100)+"%";
+    const left=gq.length-gi;$("left").textContent=left>0?left+" soru kaldı":"Gramer bugünlük bitti";
+  }
+}
+
+// ---------- KELİME ----------
+function buildQueue(){
+  const t=today();
+  if(S.day!==t){S.day=t;S.newToday=0}
+  const due=WORDS.filter(x=>S.words[x.w]&&S.words[x.w].due<=t);
+  const room=Math.max(0,S.perDay-S.newToday);
+  const fresh=WORDS.filter(x=>!S.words[x.w]).slice(0,room).map(x=>Object.assign({isNew:true},x));
+  queue=shuffle(due).concat(fresh);idx=0;doneToday=0;totalToday=queue.length;
+  if(!queue.length&&S.wDone!==t&&Object.keys(S.words).length){S.wDone=t;checkStreak()}
+}
+function highlight(ex,w){const stem=w.slice(0,Math.max(4,w.length-2));return esc(ex).replace(new RegExp("\\b("+stem+"\\w*)","i"),"<b>$1</b>")}
+function renderW(){
+  header();
+  if(idx>=queue.length)return renderWDone();
+  const c=queue[idx];const box=S.words[c.w]?S.words[c.w].box:0;
+  $("vW").innerHTML=`<div class="card tap" id="card">
+    <div class="tag">${c.isNew?"✨ Yeni kelime":"🔁 Tekrar · seviye "+box}</div>
+    <div class="word">${esc(c.w)}</div><div class="pos">${esc(c.p)}</div>
+    ${revealed?`<div class="tr">${esc(c.t)}</div><div class="ex">${highlight(c.e,c.w)}</div>`:`<div class="hint">Anlamını düşün, sonra karta dokun</div>`}
+    <button class="speak" id="spk">🔊 Dinle</button></div>
+  ${revealed?`<div class="btns"><button class="big no" id="no">Bilmiyordum</button><button class="big yes" id="yes">Biliyordum</button></div>`:""}`;
+  $("card").onclick=e=>{if(e.target.id==="spk")return;if(!revealed){revealed=true;renderW()}};
+  $("spk").onclick=e=>{e.stopPropagation();say(revealed?c.w+". "+c.e:c.w)};
+  if(revealed){$("no").onclick=()=>answerW(false);$("yes").onclick=()=>answerW(true)}
+}
+function answerW(ok){
+  const c=queue[idx],t=today();let st=S.words[c.w]||{box:0};
+  if(c.isNew){S.newToday++;delete c.isNew}
+  if(ok){st.box=Math.min(st.box+1,INTERVALS.length-1);st.due=addDays(t,INTERVALS[st.box])}
+  else{st.box=1;st.due=addDays(t,1);queue.push(Object.assign({},c));totalToday++}
+  doneToday++;S.words[c.w]=st;idx++;revealed=false;
+  if(idx>=queue.length){S.wDone=t;checkStreak()}
+  save();renderW();
+}
+function renderWDone(){
+  const learned=Object.keys(S.words).length,mastered=Object.values(S.words).filter(x=>x.box>=4).length;
+  const tomorrow=WORDS.filter(x=>S.words[x.w]&&S.words[x.w].due<=addDays(today(),1)).length;
+  const remainingNew=WORDS.length-learned;
+  $("vW").innerHTML=`<div class="card done">
+    <div style="font-size:44px">🎉</div><div class="word">Kelimeler tamam!</div>
+    <div class="pos">Yarın ${tomorrow} tekrar + ${Math.min(S.perDay,remainingNew)} yeni kelime seni bekliyor.</div>
+    <div class="stats"><div class="stat"><b>${learned}</b><span>görülen</span></div>
+    <div class="stat"><b>${mastered}</b><span>iyice öğrenilen</span></div>
+    <div class="stat"><b>${remainingNew}</b><span>kalan yeni</span></div></div>
+    ${S.g.done!==today()?`<button class="big primary" id="goG">Şimdi gramere geç →</button>`:""}
+    ${remainingNew?`<button class="speak" id="more">+5 yeni kelime daha</button>`:""}</div>`;
+  if($("goG"))$("goG").onclick=()=>show("G");
+  if($("more"))$("more").onclick=()=>{const extra=WORDS.filter(x=>!S.words[x.w]).slice(0,5).map(x=>Object.assign({isNew:true},x));queue=queue.concat(extra);totalToday+=extra.length;renderW()};
+}
+
+// ---------- GRAMER ----------
+function nextQ(id,retry){
+  const st=S.g.t[id]||(S.g.t[id]={box:0,due:null,qi:0,seen:false});
+  const t=TMAP[id];const q=t.qs[st.qi%t.qs.length];st.qi++;
+  return {id,q,retry:!!retry,fresh:!st.seen};
+}
+function buildG(){
+  const t=today();
+  if(S.g.day!==t){S.g.day=t}
+  if(S.g.done===t){gq=[];gi=0;return}
+  const seen=TOPICS.filter(x=>S.g.t[x.id]&&S.g.t[x.id].seen);
+  const due=seen.filter(x=>S.g.t[x.id].due<=t).sort((a,b)=>S.g.t[a.id].box-S.g.t[b.id].box);
+  const fresh=TOPICS.filter(x=>!(S.g.t[x.id]&&S.g.t[x.id].seen));
+  let ids=due.map(x=>x.id).slice(0,5);
+  const nNew=Math.max(2,G_PER_DAY-ids.length>=4?3:2);
+  ids=ids.concat(fresh.slice(0,nNew).map(x=>x.id));
+  // boş kalan yer için en zayıf konulardan ek soru
+  const weak=seen.slice().sort((a,b)=>S.g.t[a.id].box-S.g.t[b.id].box).map(x=>x.id);
+  let k=0;while(ids.length<G_PER_DAY&&(weak.length||fresh.length>nNew)){
+    if(weak.length){ids.push(weak[k%weak.length]);k++} else {ids.push(fresh[ids.length%fresh.length].id)}
+    if(k>30)break;
+  }
+  ids=ids.slice(0,G_PER_DAY);
+  gq=shuffle(ids).map(id=>nextQ(id,false));gi=0;gPhase="q";gRight=0;gTotal=0;
+}
+function lessonHTML(t){return `<div class="lesson"><div class="tag">📘 Konu anlatımı</div><h2>${esc(t.name)}</h2>${t.lesson}</div>`}
+function qHTML(q){return esc(q).replace("___",'<span class="blank">'+(gPhase==="q"?"&nbsp;":esc(gq[gi].q[1]))+"</span>")}
+function renderG(){
+  header();
+  if(gi>=gq.length)return renderGDone();
+  const item=gq[gi],t=TMAP[item.id],[q,ans,wr,why]=item.q;
+  if(gPhase==="lesson"){
+    $("vG").innerHTML=`<div class="card gcard">${lessonHTML(t)}
+      <button class="big primary" id="retry">Anladım, benzer bir soru sor →</button></div>`;
+    $("retry").onclick=()=>{gq.splice(gi+1,0,nextQ(item.id,true));gi++;gPhase="q";gPick=null;save();renderG()};
+    window.scrollTo(0,0);return;
+  }
+  if(gPhase==="q")gOpts=shuffle([ans].concat(wr));
+  const st=S.g.t[item.id];
+  const tag=item.retry?"🔁 Aynı konudan yeni soru":(item.fresh?"✨ Yeni konu · "+t.name:"Tekrar · "+t.name);
+  const answered=gPhase!=="q";
+  $("vG").innerHTML=`<div class="card gcard">
+    <div class="tag">${esc(tag)}</div>
+    <div class="q">${qHTML(q)}</div>
+    ${gOpts.map((o,i)=>`<button class="opt ${answered?(o===ans?"right":(o===gPick?"wrong":"")):""}" data-i="${i}" ${answered?"disabled":""}>${esc(o)}</button>`).join("")}
+    ${answered?(gPick===ans
+      ?`<div class="fb"><b style="color:var(--good)">✅ Doğru!</b>${esc(why)}</div><button class="big primary" id="nx">Sonraki →</button>`
+      :`<div class="fb"><b style="color:var(--bad)">❌ Doğru cevap: ${esc(ans)}</b>${esc(why)}</div><button class="big primary" id="ls">Konuyu öğren 📘</button>`):""}
+  </div>`;
+  if(!answered)document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answerG(gOpts[+b.dataset.i]));
+  if($("nx"))$("nx").onclick=()=>{gi++;gPhase="q";gPick=null;if(gi>=gq.length)finishG();renderG()};
+  if($("ls"))$("ls").onclick=()=>{gPhase="lesson";renderG()};
+}
+function answerG(pick){
+  const item=gq[gi],t=today(),ok=pick===item.q[1];
+  const st=S.g.t[item.id];
+  gPick=pick;gPhase="fb";gTotal++;if(ok)gRight++;
+  if(ok)S.g.right++;else S.g.wrong++;
+  if(!item.retry){
+    if(ok){st.box=Math.min(st.box+1,INTERVALS.length-1);st.due=addDays(t,INTERVALS[st.box])}
+    else{st.box=1;st.due=addDays(t,1)}
+  }else if(!ok){
+    gq.push(nextQ(item.id,true)); // tekrar yanlışsa gün sonunda bir kez daha
+  }
+  st.seen=true;
+  save();renderG();
+}
+function finishG(){S.g.done=today();checkStreak();save()}
+function renderGDone(){
+  const seen=TOPICS.filter(x=>S.g.t[x.id]&&S.g.t[x.id].seen);
+  const strong=seen.filter(x=>S.g.t[x.id].box>=3).length;
+  const weak=seen.filter(x=>S.g.t[x.id].box<=1);
+  $("vG").innerHTML=`<div class="card done">
+    <div style="font-size:44px">💪</div><div class="word">Gramer tamam!</div>
+    <div class="pos">${gTotal?`Bugün ${gTotal} sorunun ${gRight} tanesini doğru yaptın.`:"Bugünkü setini bitirdin."} Yarın yeni sorular gelecek.</div>
+    <div class="stats"><div class="stat"><b>${seen.length}/${TOPICS.length}</b><span>görülen konu</span></div>
+    <div class="stat"><b>${strong}</b><span>sağlam konu</span></div>
+    <div class="stat"><b>${weak.length}</b><span>zayıf konu</span></div></div>
+    ${weak.length?`<p class="note" style="text-align:left">Tekrar etmen gereken konular: ${weak.map(x=>esc(x.name)).join(", ")}</p>`:""}
+    ${S.wDone!==today()?`<button class="big primary" id="goW">Şimdi kelimelere geç →</button>`:""}
+    <button class="speak" id="moreG">+3 ekstra soru (zayıf konulardan)</button></div>`;
+  if($("goW"))$("goW").onclick=()=>show("W");
+  $("moreG").onclick=()=>{
+    const pool=(weak.length?weak:seen.length?seen:TOPICS).map(x=>x.id);
+    const add=shuffle(pool).slice(0,3);while(add.length<3)add.push(pool[add.length%pool.length]);
+    gq=gq.concat(add.map(id=>nextQ(id,true)));gPhase="q";renderG();
+  };
+}
+
+// ---------- İLERLEME ----------
+function lv(box,weak){let s=`<span class="lv${weak?" weak":""}">`;for(let i=1;i<=6;i++)s+=`<i class="${i<=box?"f":""}"></i>`;return s+"</span>"}
+function renderP(){
+  const gs=TOPICS.map(t=>({t,st:S.g.t[t.id]}));
+  const seenW=WORDS.filter(x=>S.words[x.w]).sort((a,b)=>S.words[a.w].box-S.words[b.w].box);
+  const acc=S.g.right+S.g.wrong?Math.round(S.g.right/(S.g.right+S.g.wrong)*100):0;
+  $("vP").innerHTML=`
+  <div class="stats"><div class="stat"><b>${S.streak}</b><span>gün seri</span></div>
+  <div class="stat"><b>${seenW.length}</b><span>kelime</span></div>
+  <div class="stat"><b>${acc}%</b><span>gramer doğruluk</span></div></div>
+  <h3>Gramer konuları</h3><p class="note" style="text-align:left;margin:0">Konu anlatımını okumak için bir konuya dokun.</p>
+  <div class="list">${gs.map(({t,st})=>`<div class="row click" data-id="${t.id}"><span>${esc(t.name)}</span><small>${st&&st.seen?lv(st.box,st.box<=1):"henüz yok"}</small></div><div class="inlesson" id="L_${t.id}" hidden>${t.lesson}</div>`).join("")}</div>
+  <h3>Kelimelerim</h3>
+  ${seenW.length?`<div class="list">${seenW.map(x=>`<div class="row"><span><b>${esc(x.w)}</b> ${lv(S.words[x.w].box,S.words[x.w].box<=1)}</span><small>${esc(x.t)}</small></div>`).join("")}</div>`:`<p class="note">Henüz kelime yok.</p>`}`;
+  document.querySelectorAll(".row.click").forEach(r=>r.onclick=()=>{const el=$("L_"+r.dataset.id);el.hidden=!el.hidden;el.classList.add("lesson")});
+}
+
+// ---------- SEKMELER ----------
+function show(t){
+  tab=t;
+  ["W","G","P"].forEach(k=>{$("t"+k).className=k===t?"on":"";$("v"+k).hidden=k!==t});
+  $("top").hidden=t==="P";$("noteW").hidden=t!=="W";$("noteG").hidden=t!=="G";
+  if(t==="W")renderW();if(t==="G")renderG();if(t==="P"){header();renderP()}
+  window.scrollTo(0,0);
+}
+$("tW").onclick=()=>show("W");$("tG").onclick=()=>show("G");$("tP").onclick=()=>show("P");
+$("perDay").onchange=e=>{S.perDay=+e.target.value;save();buildQueue();renderW()};
+
+function say(text){if(tts){tts.speak(text,{language:"en",rate:0.9}).catch(()=>browserSay(text));return}browserSay(text)}
+function browserSay(text){try{const u=new SpeechSynthesisUtterance(text);u.lang="en-GB";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+
+function start(){$("perDay").value=String(S.perDay);buildQueue();buildG();show(tab)}
+loadLocal();start();
+$("sync").textContent="📱 bu cihazda kayıtlı";
+if("serviceWorker" in navigator&&location.protocol.startsWith("http")){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+
+(async()=>{
+  try{
+    const C=window.claude;if(!C||!C.use)return;
+    tts=await C.use("tts").catch(()=>null);
+    const db=await C.use("db").catch(()=>null);
+    const user=await C.use("user").catch(()=>null);
+    if(!db||!user)return;
+    const id=await user.id();if(!id)return;
+    docRef=db.collection("data/users/"+id).doc("ielts");
+    const timer=setTimeout(()=>{$("sync").textContent="yalnızca bu cihazda"},10000);
+    const snap=await docRef.get();clearTimeout(timer);
+    const remote=snap&&(typeof snap.data==="function"?snap.data():snap);
+    const score=o=>Object.keys(o.words||{}).length+Object.keys((o.g&&o.g.t)||{}).length*3;
+    if(remote&&remote.words&&score(remote)>=score(S)){merge(remote);saveLocal();start()} else save();
+    $("sync").textContent="☁︎ senkron";
+  }catch(e){$("sync").textContent="yalnızca bu cihazda"}
+})();
+</script>
+</body>
+</html>
