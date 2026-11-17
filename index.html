@@ -490,7 +490,7 @@ function renderW(){
     <button class="speak" id="spk">🔊 Dinle</button></div>
   ${revealed?`<div class="btns"><button class="big no" id="no">Bilmiyordum</button><button class="big yes" id="yes">Biliyordum</button></div>`:""}`;
   $("card").onclick=e=>{if(e.target.id==="spk")return;if(!revealed){revealed=true;renderW()}};
-  $("spk").onclick=e=>{e.stopPropagation();say(revealed?c.w+". "+c.e:c.w)};
+  $("spk").onclick=e=>{e.stopPropagation();say(revealed?c.w+". "+c.e:c.w,c.w)};
   if(revealed){$("no").onclick=()=>answerW(false);$("yes").onclick=()=>answerW(true)}
 }
 function answerW(ok){
@@ -635,8 +635,48 @@ function show(t){
 $("tW").onclick=()=>show("W");$("tG").onclick=()=>show("G");$("tP").onclick=()=>show("P");
 $("perDay").onchange=e=>{S.perDay=+e.target.value;save();buildQueue();renderW()};
 
-function say(text){if(tts){tts.speak(text,{language:"en",rate:0.9}).catch(()=>browserSay(text));return}browserSay(text)}
-function browserSay(text){try{const u=new SpeechSynthesisUtterance(text);u.lang="en-GB";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+let voices=[];
+function loadVoices(){try{voices=window.speechSynthesis?speechSynthesis.getVoices()||[]:[]}catch(e){}}
+try{if(window.speechSynthesis){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}}catch(e){}
+function pickVoice(){if(!voices.length)loadVoices();const en=voices.filter(v=>/^en[-_]/i.test(v.lang));
+  return en.find(v=>/en[-_](GB|US)/i.test(v.lang)&&v.localService)||en.find(v=>v.localService)||en[0]||null}
+const player=new Audio();player.preload="auto";
+const SILENT="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tAwAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRBqpAAAAAAD/+0DEAAPAAAGkAAAAIAAANIAAAARMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//tAxDaDwAABpAAAACAAADSAAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
+let unlocked=false;
+function unlockAudio(){if(unlocked)return;unlocked=true;try{player.src=SILENT;const p=player.play();if(p)p.catch(()=>{})}catch(e){}}
+function toast(msg){let t=$("toast");if(!t){t=document.createElement("div");t.id="toast";
+  t.style.cssText="position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;max-width:90%;text-align:center;z-index:9;transition:opacity .3s";
+  document.body.appendChild(t)}t.textContent=msg;t.style.opacity=1;clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity=0,3500)}
+function say(text,word){
+  unlockAudio();
+  if(tts){tts.speak(text,{language:"en",rate:0.9}).catch(()=>browserSay(text,word));return}
+  browserSay(text,word);
+}
+function browserSay(text,word){
+  const ss=window.speechSynthesis;
+  if(!ss||typeof SpeechSynthesisUtterance==="undefined"){audioSay(word);return}
+  let started=false;
+  try{
+    if(ss.speaking||ss.pending)ss.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    const v=pickVoice();if(v){u.voice=v;u.lang=v.lang}else u.lang="en-US";
+    u.rate=.9;u.volume=1;
+    u.onstart=()=>{started=true};
+    u.onerror=ev=>{if(!started&&ev.error!=="interrupted"&&ev.error!=="canceled")audioSay(word)};
+    ss.speak(u);if(ss.paused)ss.resume();
+    setTimeout(()=>{if(!started&&!ss.speaking)audioSay(word)},1200);
+  }catch(e){audioSay(word)}
+}
+async function audioSay(word){
+  try{
+    const r=await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/"+encodeURIComponent(word));
+    const j=await r.json();
+    const urls=(Array.isArray(j)?j:[]).flatMap(e=>(e.phonetics||[]).map(p=>p.audio)).filter(Boolean);
+    const url=urls.find(u=>/-uk\./.test(u))||urls.find(u=>/-us\./.test(u))||urls[0];
+    if(!url)throw 0;
+    player.src=url;await player.play();
+  }catch(e){toast("Ses çalınamadı 🔇 Telefonun sessiz modda olabilir ya da ses kısık olabilir.")}
+}
 
 function start(){$("perDay").value=String(S.perDay);buildQueue();buildG();show(tab)}
 loadLocal();start();
